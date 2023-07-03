@@ -1,0 +1,18 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'odys/react-test', '-f', './client/Dockerfile.dev', './client']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['run', '-e CI=true' 'odys/react-test', 'npm', 'test']
+    id: client-test
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'odys/multi-client', './client']
+    waitFor: client-test
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'odys/multi-nginx', './nginx']
+    waitFor: client-test
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'odys/multi-server', './server']
+    waitFor: client-test
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'odys/multi-worker', './worker']
+    waitFor: client-test
