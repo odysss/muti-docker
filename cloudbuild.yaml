@@ -18,7 +18,7 @@ steps:
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
   id: 'docker-login'
-  args: ['login --username=$$USERNAME --password=$$PASSWORD']
+  args: ['login', '--username=$$USERNAME', '--password=$$PASSWORD']
   secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['docker', 'push', 'odys/multi-client']
