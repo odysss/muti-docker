@@ -16,3 +16,21 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'odys/multi-worker', './worker']
   waitFor: ['client-test']
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'docker-login'
+  args: ['docker login --username=$$USERNAME --password=$$PASSWORD']
+  secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['docker', 'push', 'odys/multi-client']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['docker', 'push', 'odys/multi-nginx']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['docker', 'push', 'odys/multi-server']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['docker', 'push', 'odys/multi-worker']
+availableSecrets:
+  secretManager:
+  - versionName: projects/837909578112/secrets/DOCKER_PASSWORD
+  env: 'DOCKER_PASSWORD'
+  - versionName: projects/837909578112/secrets/DOCKER_USERNAME
+  env: 'DOCKER_USERNAME'
