@@ -1,5 +1,10 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
+  id: 'docker-login'
+  entrypoint: 'bash'
+  args: ['-c', 'docker login --username=$$DOCKER_USERNAME --password=$$DOCKER_PASSWORD']
+  secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'odys/react-test', '-f', './client/Dockerfile.dev', './client']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', '-e', 'CI=true', 'odys/react-test', 'npm', 'test']
@@ -16,10 +21,6 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'odys/multi-worker', './worker']
   waitFor: ['client-test']
-- name: 'gcr.io/cloud-builders/docker'
-  id: 'docker-login'
-  args: ['login', '--username=$$DOCKER_USERNAME', '--password=$$DOCKER_PASSWORD']
-  secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['docker', 'push', 'odys/multi-client']
 - name: 'gcr.io/cloud-builders/docker'
