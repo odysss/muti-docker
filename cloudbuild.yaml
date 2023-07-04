@@ -22,13 +22,13 @@ steps:
   args: ['build', '-t', 'odys/multi-worker', './worker']
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['docker', 'push', 'odys/multi-client']
+  args: ['push', 'odys/multi-client']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['docker', 'push', 'odys/multi-nginx']
+  args: ['push', 'odys/multi-nginx']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['docker', 'push', 'odys/multi-server']
+  args: ['push', 'odys/multi-server']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['docker', 'push', 'odys/multi-worker']
+  args: ['push', 'odys/multi-worker']
 availableSecrets:
   secretManager:
   - versionName: projects/837909578112/secrets/DOCKER_PASSWORD/versions/latest
