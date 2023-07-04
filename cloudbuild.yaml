@@ -1,8 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   id: 'docker-login'
-  entrypoint: 'bash'
-  args: ['-c', 'docker login --username=$$DOCKER_USERNAME --password=$$DOCKER_PASSWORD']
+  args: ['login', '--username=$$DOCKER_USERNAME', '--password=$$DOCKER_PASSWORD']
   secretEnv: ['DOCKER_USERNAME', 'DOCKER_PASSWORD']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'odys/react-test', '-f', './client/Dockerfile.dev', './client']
@@ -31,7 +30,7 @@ steps:
   args: ['docker', 'push', 'odys/multi-worker']
 availableSecrets:
   secretManager:
-  - versionName: projects/837909578112/secrets/DOCKER_PASSWORD/versions/1
+  - versionName: projects/837909578112/secrets/DOCKER_PASSWORD/versions/latest
     env: 'DOCKER_PASSWORD'
-  - versionName: projects/837909578112/secrets/DOCKER_USERNAME/versions/1
+  - versionName: projects/837909578112/secrets/DOCKER_USERNAME/versions/latest
     env: 'DOCKER_USERNAME'
