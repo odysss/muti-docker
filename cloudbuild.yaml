@@ -10,32 +10,40 @@ steps:
   args: ['run', '-e', 'CI=true', 'odys/react-test', 'npm', 'test']
   id: 'client-test'
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '"$$USERNAME"/multi-client', './client']
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t "$$USERNAME"/multi-client ./client']
   secretEnv: ['USERNAME']
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '"$$USERNAME"/multi-nginx', './nginx']
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t "$$USERNAME"/multi-nginx ./nginx']
   secretEnv: ['USERNAME']
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '"$$USERNAME"/multi-server', './server']
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t "$$USERNAME"/multi-server ./server']
   secretEnv: ['USERNAME']
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '"$$USERNAME"/multi-worker', './worker']
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t "$$USERNAME"/multi-worker ./worker']
   secretEnv: ['USERNAME']
   waitFor: ['client-test']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '"$$USERNAME"/multi-client']
+  entrypoint: 'bash'
+  args: ['-c', 'docker push "$$USERNAME"/multi-client']
   secretEnv: ['USERNAME']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '"$$USERNAME"/multi-nginx']
+  entrypoint: 'bash'
+  args: ['-c', 'docker push "$$USERNAME"/multi-nginx']
   secretEnv: ['USERNAME']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '"$$USERNAME"/multi-server']
+  entrypoint: 'bash'
+  args: ['-c', 'docker push "$$USERNAME"/multi-server']
   secretEnv: ['USERNAME']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '"$$USERNAME"/multi-worker']
+  entrypoint: 'bash'
+  args: ['-c', 'docker push "$$USERNAME"/multi-worker']
   secretEnv: ['USERNAME']
 availableSecrets:
   secretManager:
